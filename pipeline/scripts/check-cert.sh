@@ -1,6 +1,7 @@
 #!/bin/bash
 
 if [ -z "${GCP_CREDENTIALS}" ]; then echo No GCP_CREDENTIALS; exit 1; fi
+if [ -z "${GCP_PROJECT}" ]; then echo No GCP_PROJECT; exit 1; fi
 if [ -z "${GCP_CREDENTIALS_FILE}" ]; then export GCP_CREDENTIALS_FILE="/accounts.json"; fi
 if [ -z "${GCP_HTTPS_PROXY}" ]; then echo No GCP_HTTPS_PROXY; exit 1; fi
 if [ -z "${CERT_RENEW_BEFORE}" ]; then echo Setting cert renewall to 7 days; CERT_RENEW_BEFORE=604800; fi
@@ -17,14 +18,14 @@ if [ $? -ne 0 ]; then
 fi
 
 # Get current certificate name
-CERT_NAME=$(gcloud compute target-https-proxies describe ${GCP_HTTPS_PROXY} --format=json | jq '.sslCertificates[0]' | xargs basename)
+CERT_NAME=$(gcloud compute target-https-proxies describe ${GCP_HTTPS_PROXY} --project ${GCP_PROJECT} --format=json | jq '.sslCertificates[0]' | xargs basename)
 
 if [ -z ${CERT_NAME} ]; then
 	echo Cannot find certificate in GCP
 	exit 1
 fi
 
-CERT=$(gcloud compute ssl-certificates describe ${CERT_NAME} --format='get(certificate)')
+CERT=$(gcloud compute ssl-certificates describe ${CERT_NAME} --project ${GCP_PROJECT} --format='get(certificate)')
 
 echo Date: $(date)
 echo Expiry date: $(echo "$CERT" | openssl x509 -enddate -noout | awk -F= '{print $2}')

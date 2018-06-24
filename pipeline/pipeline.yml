@@ -10,6 +10,7 @@ jobs:
     params:
       GCP_CREDENTIALS: {{GCP_CREDENTIALS}}
       GCP_HTTPS_PROXY: {{GCP_HTTPS_PROXY}}
+      GCP_PROJECT: {{GCP_PROJECT}}
       CERT_RENEW_BEFORE: {{CERT_RENEW_BEFORE}}
 - name: update-old-certificate
   plan:
@@ -21,6 +22,7 @@ jobs:
     file: git-pipeline/pipeline/tasks/update-cert.yml
     params:
       GCP_CREDENTIALS: {{GCP_CREDENTIALS}}
+      GCP_PROJECT: {{GCP_PROJECT}}
       GCP_HTTPS_PROXY: {{GCP_HTTPS_PROXY}}
       CF_DOMAINS: {{CF_DOMAINS}}
       LE_SERVER: {{LE_SERVER}}
@@ -42,7 +44,7 @@ resources:
   type: git
   source:
     branch: master
-    uri: https://github.com/mattsday/le-for-pcf-on-gcp
+    uri: https://github.com/nevenc/le-for-pcf-on-gcp
 - name: schedule
   type: time
   source:

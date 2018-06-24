@@ -1,6 +1,7 @@
 #!/bin/bash
 
 if [ -z "${GCP_CREDENTIALS}" ]; then echo No GCP_CREDENTIALS; exit 1; fi
+if [ -z "${GCP_PROJECT}" ]; then echo No GCP_PROJECT; exit 1; fi
 if [ -z "${CF_DOMAINS}" ]; then echo No CF_DOMAINS; exit 1; fi
 if [ -z "${LE_EMAIL}" ]; then echo No LE_EMAIL; exit 1; fi
 if [ -z "${LE_SERVER}" ]; then export LE_SERVER="https://acme-v02.api.letsencrypt.org/directory"; fi
@@ -51,8 +52,8 @@ if [ ${SKIP_GCP_CERT} = false ]; then
 		exit 1;
 	fi
 
-	gcloud compute ssl-certificates create ${GCP_CERT_NAME} --certificate=${PUB_CERT} --private-key=${PRIV_KEY} --description="Letsencrypt cert updated $(date)"
-	gcloud compute target-https-proxies update ${GCP_HTTPS_PROXY} --ssl-certificates=${GCP_CERT_NAME}
+	gcloud compute ssl-certificates create ${GCP_CERT_NAME} --certificate=${PUB_CERT} --private-key=${PRIV_KEY} --project ${GCP_PROJECT} --description="Letsencrypt cert updated $(date)"
+	gcloud compute target-https-proxies update ${GCP_HTTPS_PROXY} --ssl-certificates=${GCP_CERT_NAME} --project ${GCP_PROJECT}
 else
 	echo Skipping updating Google Load Balancer Certificate
 
