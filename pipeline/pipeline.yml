@@ -48,10 +48,10 @@ resources:
 - name: schedule
   type: time
   source:
-    interval: 60s
-    start: "12:00 AM"
-    stop: "11:59 PM"
-#    interval: 24h
-#    start: "01:00 AM"
-#    stop: "03:00 AM"
-#    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    # interval: 60s
+    # start: "12:00 AM"
+    # stop: "11:59 PM"
+    interval: 24h
+    start: "01:00 AM"
+    stop: "03:00 AM"
+    days: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
